@@ -11,6 +11,10 @@ export CACHE_ENTRY_TTL=600000 # (will be divided by SPEEDUP)
 export EDGE_ADDRESS="https://api.e2e.apigee.net"
 export PERMISSIONS_MIGRATION_CLIENTID=${PERMISSIONS_MIGRATION_CLIENTID:-defaultclient} # configure this in your shell when testing
 export PERMISSIONS_MIGRATION_CLIENTSECRET=${PERMISSIONS_MIGRATION_CLIENTSECRET:-defaultsecret} # configure this in your shell when testing
+# temporary hack - using the same clientID for migration to access edge and for team to access permissions
+export PERMISSIONS_CLIENTID=${PERMISSIONS_MIGRATION_CLIENTID:-defaultclient} # configure this in your shell when testing
+export PERMISSIONS_CLIENTSECRET=${PERMISSIONS_MIGRATION_CLIENTSECRET:-defaultsecret} # configure this in your shell when testing
+export CLIENT_TOKEN_ISSUER="https://login.e2e.apigee.net"
 
 source ../local-export-pg-connection-variables.sh
 #NODE_DEBUG=net
