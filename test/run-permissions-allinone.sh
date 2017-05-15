@@ -1,3 +1,5 @@
+export WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 export IPADDRESS="127.0.0.1"
 export PORT=3200
 export COMPONENT_NAME="permissions-allinone"
@@ -14,6 +16,6 @@ export PERMISSIONS_CLIENTID=$PERMISSIONS_CLIENTID # configure this in your shell
 export PERMISSIONS_CLIENTSECRET=$PERMISSIONS_CLIENTSECRET # configure this in your shell when testing
 export CLIENT_TOKEN_ISSUER="https://login.e2e.apigee.net"
 
-source ../local-export-pg-connection-variables.sh
+source $WORKING_DIR/local-export-pg-connection-variables.sh
 #NODE_DEBUG=net
 node permissions-allinone.js

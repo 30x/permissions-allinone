@@ -20,33 +20,34 @@ const config = {
 }
 const pool = new Pool(config)
 
-const COMPONENT_NAME = 'permissions-all-in-one'
+const COMPONENT_NAME = 'permissions-allinone'
 
 function log(functionName, text) {
   console.log(Date.now(), COMPONENT_NAME, functionName, text)
 }
 
 function requestHandler(req, res) {
-  for (var i=0; i<microServices.length; i++) {
-    var microService = microServices[i]
-    var paths = microServices[i].paths
-    for (var j=0; j<paths.length; j++)
-      if (req.url.startsWith(paths[j]))
-        return microService.requestHandler(req, res)
-  }
-  rLib.notFound(res, `allinone: //${req.headers.host}${req.url} not found`)
+    let req_url = url.parse(req.url)
+    for (let i = 0; i < microServices.length; i++) {
+      let microService = microServices[i]
+      let paths = microServices[i].paths
+      for (let j = 0; j < paths.length; j++)
+        if (req_url.pathname === paths[j])
+          return microService.requestHandler(req, res)
+    }
+    rLib.notFound(res, `allinone: //${req.headers.host}${req.url} not found`)
 }
 
 function start() {
-  var count = 0
+  let count = 0
   for (let i=0; i<microServices.length; i++) {
-    var microService = microServices[i]
+    let microService = microServices[i]
     microService.init(function(err) {
     if (err)
       log(`failed to init microservice ${i}`, err)
     else 
       if (++count == microServices.length) {
-        var port = process.env.PORT
+        let port = process.env.PORT
         http.createServer(requestHandler).listen(port, function() {
           log('start', `server is listening on ${port}`)
         })
