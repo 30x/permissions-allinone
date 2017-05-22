@@ -30,10 +30,13 @@ function requestHandler(req, res) {
     let req_url = url.parse(req.url)
     for (let i = 0; i < microServices.length; i++) {
       let microService = microServices[i]
-      let paths = microServices[i].paths
-      for (let j = 0; j < paths.length; j++)
-        if (req_url.pathname === paths[j])
+      let paths = microServices[i].paths.sort(function(path1, path2){
+        return path2.length - path1.length;
+      })
+      for (let j = 0; j < paths.length; j++) {
+        if (req_url.pathname.startsWith(paths[j]))
           return microService.requestHandler(req, res)
+      }
     }
     rLib.notFound(res, `allinone: //${req.headers.host}${req.url} not found`)
 }
