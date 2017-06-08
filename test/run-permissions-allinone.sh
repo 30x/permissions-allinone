@@ -1,4 +1,3 @@
-export WORKING_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export IPADDRESS="127.0.0.1"
 export PORT=3200
@@ -16,6 +15,28 @@ export PERMISSIONS_CLIENTID=$PERMISSIONS_CLIENTID # configure this in your shell
 export PERMISSIONS_CLIENTSECRET=$PERMISSIONS_CLIENTSECRET # configure this in your shell when testing
 export CLIENT_TOKEN_ISSUER="https://login.e2e.apigee.net"
 
-source $WORKING_DIR/local-export-pg-connection-variables.sh
+MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+echo "cd into ${MYDIR}/.."
+cd "${MYDIR}/.."
+
+PG_VAR_FILE="${MYDIR}/../../local-export-pg-connection-variables.sh"
+if [[ -f "$PG_VAR_FILE" ]]; then
+    echo "Sourcing in ${PG_VAR_FILE}"
+    source "$PG_VAR_FILE" || exit 1
+else
+    echo "Please create a file called local-export-pg-connection-variables.sh in parent dir of permissions (../../${MYDIR})"
+	exit 1
+fi
+
+EXPORT_VAR_FILE="${MYDIR}/../../export-e2e-variables.sh"
+if [[ -f "$EXPORT_VAR_FILE" ]]; then
+	echo "Sourcing in file $EXPORT_VAR_FILE"
+	source $EXPORT_VAR_FILE || exit 1
+else
+    echo "Please create a file called export-e2e-variables.sh in parent dir of permissions (../../${MYDIR})"
+	exit 1
+fi
+
 #NODE_DEBUG=net
 node permissions-allinone.js
